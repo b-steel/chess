@@ -1,6 +1,7 @@
 from mamba import description, context, it, before, after
 from expects import equal, expect, be_a, be
-from place import Square
+from places import Square
+from 
 
 with description('Square') as self:
     with before.each:
