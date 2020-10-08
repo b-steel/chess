@@ -14,59 +14,56 @@ class Square():
         self.u = None
         self.d = None
 
+
     def add_piece(self, piece):
-        assert self.pieces is None
+        assert self.piece is None
         self.pieces = piece
         piece.place = self
     
     @property
     def ur(self):
-        try:
-            return self.u.r
-        except Exception:
-            pass
-        try:
+        if self.u is None:
+            if self.r is None:
+                return None
             return self.r.u
-        except Exception:
-            pass
-        finally:
-            return None
+        return self.u.r
 
     @property
     def ul(self):
-        try:
-            return self.u.l
-        except Exception:
-            pass
-        try:
+        if self.u is None:
+            if self.l is None:
+                return None
             return self.l.u
-        except Exception:
-            pass
-        finally:
-            return None
+        return self.u.l
 
     @property
-    def dl(self):
-        try:
-            return self.d.l
-        except Exception:
-            pass
-        try:
+    def dl(self):        
+        if self.d is None:
+            if self.l is None:
+                return None
             return self.l.d
-        except Exception:
-            pass
-        finally:
-            return None
+        return self.d.l
 
     @property
     def dr(self):
-        try:
-            return self.d.r
-        except Exception:
-            pass
-        try:
+        if self.d is None:
+            if self.r is None:
+                return None
             return self.r.d
-        except Exception:
-            pass
-        finally:
-            return None
+        return self.d.r
+        
+    @property
+    def ru(self):
+        return self.ur()
+
+    @property
+    def lu(self):
+        return self.ul()
+
+    @property
+    def rd(self):
+        return self.dr()
+
+    @property
+    def ld(self):
+        return self.dl()
