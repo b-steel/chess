@@ -15,6 +15,7 @@
 * has places for the taken pieces
 * takes moves and relays that to the places and the pieces
 * checks for check and checkmate (by asking the kings) after every move
+* has a stack of moves for undoing
 
 # Place
 * contains pieces
