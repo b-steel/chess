@@ -57,3 +57,32 @@ with description('Board') as self:
             for row in range(6):
                 for col in range(7):
                     expect(self.b.grid[row][col].ur).to(be(self.b.grid[row+1][col+1]))
+
+    with context('create pieces'):
+        with before.each:
+            self.b = Board()
+
+            with it('has pawns'):
+                for col in range(8):
+                    expect(self.b.grid[1][col].piece).to(be_a(Pawn))
+                    expect(self.b.grid[6][col].piece).to(be_a(Pawn))
+            with it('has other pieces'):
+                for row in [0,7]:
+                    expect(self.b.grid[row][0].piece).to(be_a(Rook))
+                    expect(self.b.grid[row][7].piece).to(be_a(Rook))
+                    expect(self.b.grid[row][1].piece).to(be_a(Knight))
+                    expect(self.b.grid[row][6].piece).to(be_a(Knight))
+                    expect(self.b.grid[row][2].piece).to(be_a(Bishop))
+                    expect(self.b.grid[row][5].piece).to(be_a(Bishop))
+                    expect(self.b.grid[row][3].piece).to(be_a(Queen))
+                    expect(self.b.grid[row][4].piece).to(be_a(King))
+
+            with it('has opposite teams'):
+                expect(self.b.grid[0][3].piece.team.opponent).to(be(self.b.grid[6][0].piece.team))
+
+
+
+
+
+
+

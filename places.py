@@ -4,6 +4,7 @@ class Captured():
     
     def add_piece(self, piece):
         self.pieces.append(piece)
+        piece.place.piece = None
         piece.place = self
         piece.team.pieces.remove(piece)
 

@@ -4,7 +4,7 @@ class Pawn():
     def __init__(self, direction):
         self.team = None
         self.place = None
-        self.name = 'Pawn'
+        self.name = 'pawn'
         self.moved = False
         self.char = chars[self.name]
         self.dir = direction
