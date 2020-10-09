@@ -1,5 +1,4 @@
 from chars import chars
-
 class Pawn():
     def __init__(self, square, direction, team):
         self.team = team
@@ -34,3 +33,61 @@ class Rook():
         self.moved = False
         self.char = chars[self.name]
         self.dir = direction
+
+    def moves(self): 
+        m = []
+        for d in ['r', 'l', 'u', 'd']:
+            sq = getattr(self.sq, d)
+            while (sq is not None) and (not sq.piece):
+                m.append(sq)
+                sq = getattr(sq, d) #next sq (square)
+            
+
+
+class Knight():
+    def __init__(self, square, direction, team):
+        self.team = team
+        self.sq = square
+        self.name = 'knight'
+        self.moved = False
+        self.char = chars[self.name]
+        self.dir = direction
+
+    def moves(self): 
+        pass
+
+class Bishop():
+    def __init__(self, square, direction, team):
+        self.team = team
+        self.sq = square
+        self.name = 'bishop'
+        self.moved = False
+        self.char = chars[self.name]
+        self.dir = direction
+
+    def moves(self): 
+        pass
+
+class Queen():
+    def __init__(self, square, direction, team):
+        self.team = team
+        self.sq = square
+        self.name = 'queen'
+        self.moved = False
+        self.char = chars[self.name]
+        self.dir = direction
+
+    def moves(self): 
+        pass
+
+class King():
+    def __init__(self, square, direction, team):
+        self.team = team
+        self.sq = square
+        self.name = 'king'
+        self.moved = False
+        self.char = chars[self.name]
+        self.dir = direction
+
+    def moves(self): 
+        pass
