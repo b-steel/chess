@@ -41,6 +41,7 @@ class Rook():
             while (sq is not None) and (not sq.piece):
                 m.append(sq)
                 sq = getattr(sq, d) #next sq (square)
+        return m
             
 
 
@@ -54,7 +55,16 @@ class Knight():
         self.dir = direction
 
     def moves(self): 
-        pass
+        m = []
+        for d1, d2 in zip(['u', 'u', 'd', 'd', 'l', 'l', 'r', 'r'], ['l', 'r', 'l', 'r', 'u', 'd', 'u', 'd']):
+            s1 = getattr(self.sq, d1)
+            if s1:
+                s2 = getattr(s1, d1)
+                if s2:
+                    s3 = getattr(s2, d2)
+                    if s3 and s3.piece.team != self.team:
+                        m.append(s3)
+        return m
 
 class Bishop():
     def __init__(self, square, direction, team):
@@ -63,7 +73,7 @@ class Bishop():
         self.name = 'bishop'
         self.moved = False
         self.char = chars[self.name]
-        self.dir = direction
+        self.dir = digitrection
 
     def moves(self): 
         m = []
@@ -72,6 +82,7 @@ class Bishop():
             while (sq is not None) and (not sq.piece):
                 m.append(sq)
                 sq = getattr(sq, d) #next sq (square)
+        return m
 
 class Queen():
     def __init__(self, square, direction, team):
