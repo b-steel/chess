@@ -39,7 +39,7 @@ class Game():
     def in_check(self):
         b_king = self.teams[0].king
         w_king = self.teams[1].king
-        return 'black' if b_king.check(b_king.place) else 'white' if w_king.check(w_king.place) else False
+        return 'black' if b_king.check(b_king.place) else ('white' if w_king.check(w_king.place) else False)
 
     def prompt(self):
         '''prompts the current player for input'''
@@ -134,11 +134,15 @@ class Game():
         move = self.prompt()
         if move == 'save':
             return 'save'
+        self.do(move)
+    
+    def do(self, move):
         self.board.move(move)
         self.turn +=1
         player_in_check = self.in_check
         if player_in_check:
             print(f'{player_in_check.capitalize()} is in CHECK')
+
 
     def play(self):
         if self.loaded:

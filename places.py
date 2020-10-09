@@ -72,7 +72,7 @@ class Square():
         return self.dl()
 
     def __str__(self):
-        return f'Square at {self.col}{self.row} with piece {self.piece.name if self.piece else self.piece}'
+        return f'Sq at {self.col}{self.row} with  {self.piece.name if self.piece else self.piece}'
 
     def __repr__(self):
         return f'<Square {self.col}{self.row}>'

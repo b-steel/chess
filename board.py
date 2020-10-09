@@ -69,7 +69,7 @@ class Board():
         #left
         for i,col in enumerate(cols[1:8]):
             for row in range(8):
-                self.grid[col][row].l = self.grid[cols[i-1]][row]
+                self.grid[col][row].l = self.grid[cols[i]][row]
         #up
         for row in range(7):
             for col in cols:
@@ -91,6 +91,8 @@ class Board():
         start = self.grid[move[0][0]][move[0][1]]
         end = self.grid[move[1][0]][move[1][1]]
         p = start.piece
+        t = self.teams[self.player]
+        
         if end in p.moves():
             return True
         return False

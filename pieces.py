@@ -9,7 +9,7 @@ class Piece():
         self.char = None
     
     def __str__(self):
-        return f'{self.name.capitalize()} Piece at {self.place.col}{self.place.row} on team {self.team.color}'
+        return f'{self.name.capitalize()} at {self.place.col}{self.place.row} on team {self.team.color}'
 
 class Pawn(Piece):
     def __init__(self, direction):
