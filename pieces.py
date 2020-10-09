@@ -1,6 +1,17 @@
 from chars import chars
 from team import Team
-class Pawn():
+class Piece():
+    def __init__(self):
+        self.team = None
+        self.place = None
+        self.name = ''
+        self.moved = False
+        self.char = None
+    
+    def __str__(self):
+        return f'{self.name.capitalize()} Piece at {self.place.col}{self.place.row} on team {self.team.color}'
+
+class Pawn(Piece):
     def __init__(self, direction):
         self.team = None
         self.place = None
@@ -26,7 +37,7 @@ class Pawn():
 
         return m
 
-class Rook():
+class Rook(Piece):
     def __init__(self, direction):
         self.team = None
         self.place = None
@@ -46,7 +57,7 @@ class Rook():
             
 
 
-class Knight():
+class Knight(Piece):
     def __init__(self, direction):
         self.team = None
         self.place = None
@@ -67,7 +78,7 @@ class Knight():
                         m.append(s3)
         return m
 
-class Bishop():
+class Bishop(Piece):
     def __init__(self, direction):
         self.team = None
         self.place = None
@@ -85,7 +96,7 @@ class Bishop():
                 sq = getattr(sq, d) #next sq (square)
         return m
 
-class Queen():
+class Queen(Piece):
     def __init__(self, direction):
         self.team = None
         self.place = None
@@ -104,7 +115,7 @@ class Queen():
         return m 
         
 
-class King():
+class King(Piece):
     def __init__(self, direction):
         self.team = None
         self.place = None

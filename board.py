@@ -145,7 +145,8 @@ class Board():
 # b.move((('a',1), ('a',3)))
 # b.capture(b.grid['a'][0].piece)
 # b.capture(b.grid['h'][6].piece)
-
+# print(b.grid['b'][0])
+# print(b.grid['b'][0].piece)
 
 # print(b)
 
