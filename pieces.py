@@ -111,6 +111,22 @@ class King():
         self.moved = False
         self.char = chars[self.name]
         self.dir = direction
+    
+    def check(self, sqare = self.sq):
+        pass
+
+
+    def checkmate(self):
+        return self.moves() is []
 
     def moves(self): 
+        m = []
+        for d in ['r', 'l', 'u', 'd', 'ur', 'ul', 'dr', 'dl']:
+            sq = getattr(self.sq, d)
+            if (sq is not None) and (not sq.piece) and (not self.check(sq)):
+                m.append(sq)
+        return m 
+
+    def castle(self):
+        '''returns if you can castle'''
         pass
