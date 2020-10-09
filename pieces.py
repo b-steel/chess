@@ -12,14 +12,14 @@ class Pawn():
     def moves(self):
         if self.dir > 0:
             #regular orientation
-            m = [sq for sq in [self.place.u, self.place.ur, self.place.ul] if (sq.piece and sq.piece.team == self.team)]
+            m = [sq for sq in [self.place.u, self.place.ur, self.place.ul] if sq and (not sq.piece or sq.piece.team !=self.team)]
             #move two on first move
             if ((self.place.d.d is None) and (self.place.u is None) and (self.place.u.u.team != self.team)):
                 m.append(self.place.u.u)
 
         else:
             #reverse orientation 
-            m = [sq for sq in [self.place.d, self.place.dr, self.place.dl] if (sq.piece and sq.piece.team == self.team)]
+            m = [sq for sq in [self.place.d, self.place.dr, self.place.dl] if sq and (not sq.piece or sq.piece.team != self.team)]
             #move two on first move
             if ((self.place.u.u is None) and (self.place.d is None) and (self.place.d.d.team != self.team)):
                 m.append(self.place.d.d)

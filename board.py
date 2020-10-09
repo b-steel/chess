@@ -91,9 +91,9 @@ class Board():
     def move(self, move):
         '''Moves the piece from start to end. Assumes valid move
         
-        move is (start(row,col), end(row,col))'''
-        start = self.grid[move[0][0]][move[0][1]]
-        end = self.grid[move[1][0]][move[1][1]]
+        move is (start(col, row), end(col, row))'''
+        start = self.grid[move[0][1]][move[1][0]]
+        end = self.grid[move[1][1]][move[1][0]]
         p = start.piece
         if end.piece:
             self.capture(end.piece)
@@ -137,16 +137,16 @@ class Board():
         return self._print_text()
 
 
-b = Board()
-b.move(((1,0), (3,0)))
-b.capture(b.grid[0][6].piece)
-b.capture(b.grid[7][5].piece)
-b.capture(b.grid[7][0].piece)
-b.capture(b.grid[1][5].piece)
-b.capture(b.grid[1][3].piece)
-b.capture(b.grid[1][1].piece)
-b.capture(b.grid[1][7].piece)
+# b = Board()
+# b.move(((1,0), (3,0)))
+# b.capture(b.grid[0][6].piece)
+# b.capture(b.grid[7][5].piece)
+# b.capture(b.grid[7][0].piece)
+# b.capture(b.grid[1][5].piece)
+# b.capture(b.grid[1][3].piece)
+# b.capture(b.grid[1][1].piece)
+# b.capture(b.grid[1][7].piece)
 
-print(b)
+# print(b)
 
         
