@@ -23,16 +23,20 @@ class Pawn(Piece):
     def moves(self):
         if self.dir > 0:
             #regular orientation
-            m = [sq for sq in [self.place.u, self.place.ur, self.place.ul] if sq and (not sq.piece or sq.piece.team !=self.team)]
+            m = [sq for sq in [self.place.u] if sq and not sq.piece]
+            m.append([sq for sq in [self.place.ur, self.place.ul] if sq and sq.piece and sq.piece.team !=self.team])
+        
             #move two on first move
-            if ((self.place.d.d is None) and (self.place.u is None) and (self.place.u.u.team != self.team)):
+            if (self.place.d.d is None and not self.place.u.piece and not self.place.u.u.piece):
                 m.append(self.place.u.u)
 
         else:
             #reverse orientation 
-            m = [sq for sq in [self.place.d, self.place.dr, self.place.dl] if sq and (not sq.piece or sq.piece.team != self.team)]
+            m = [sq for sq in [self.place.d] if sq and not sq.piece]
+            m.append([sq for sq in [self.place.dr, self.place.dl] if sq and sq.piece and sq.piece.team !=self.team])
+        
             #move two on first move
-            if ((self.place.u.u is None) and (self.place.d is None) and (self.place.d.d.team != self.team)):
+            if (self.place.u.u is None and not self.place.d.piece and not self.place.d.d.piece):
                 m.append(self.place.d.d)
 
         return m
@@ -53,6 +57,8 @@ class Rook(Piece):
             while (sq is not None) and (not sq.piece):
                 m.append(sq)
                 sq = getattr(sq, d) #next sq (square)
+            if sq and sq.piece and sq.piece.team != self.team:
+                m.append(sq)
         return m
             
 
@@ -74,7 +80,7 @@ class Knight(Piece):
                 s2 = getattr(s1, d1)
                 if s2:
                     s3 = getattr(s2, d2)
-                    if s3 and s3.piece.team != self.team:
+                    if s3 and (not s3.piece or s3.piece and s3.piece.team != self.team):
                         m.append(s3)
         return m
 
@@ -94,6 +100,8 @@ class Bishop(Piece):
             while (sq is not None) and (not sq.piece):
                 m.append(sq)
                 sq = getattr(sq, d) #next sq (square)
+            if sq and sq.piece and sq.piece.team != self.team:
+                m.append(sq)
         return m
 
 class Queen(Piece):
@@ -112,6 +120,8 @@ class Queen(Piece):
             while (sq is not None) and (not sq.piece):
                 m.append(sq)
                 sq = getattr(sq, d) #next sq (square)
+            if sq and sq.piece and sq.piece.team != self.team:
+                m.append(sq)    
         return m 
         
 
@@ -138,7 +148,7 @@ class King(Piece):
         m = []
         for d in ['r', 'l', 'u', 'd', 'ur', 'ul', 'dr', 'dl']:
             sq = getattr(self.place, d)
-            if (sq is not None) and (not sq.piece) and (not self.check(sq)):
+            if sq and (not sq.piece or sq.piece.team != self.team) and (not self.check(sq)):
                 m.append(sq)
         return m 
 

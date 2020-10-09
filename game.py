@@ -13,8 +13,8 @@ class Game():
             cols = list('abcdefgh')
             try:
                 s,e = choice.lower().split(',')
-                scol, srow = list(s)
-                ecol, erow = list(e)
+                scol, srow = list(s.lstrip().rstrip())
+                ecol, erow = list(e.lstrip().rstrip())
                 
                 assert scol in cols
                 assert ecol in cols
@@ -43,7 +43,6 @@ class Game():
 
     def _check_move(self, move):
         '''Check if the piece belongs to the player and is valid'''
-        print(move)
         s,e = move
         scol,srow = s
         ecol, erow = e
@@ -51,13 +50,11 @@ class Game():
         
         piece = start_sq.piece
         end_sq = self.board.grid[ecol][erow]
-        print('end', end_sq)
-        print('piece', piece)
-        print('moves', piece.moves())
-        print(end_sq in piece.moves())
-        if piece.team is self.teams[self.player()]:
-            if end_sq in piece.moves():
-                return True
+        
+        if piece:
+            if piece.team is self.teams[self.player()]:
+                if end_sq in piece.moves():
+                    return True
         return False
 
 
@@ -73,4 +70,5 @@ class Game():
         self.board.move(move)
 
 g = Game()
-g.take_turn()
+for i in range(4):
+    g.take_turn()
