@@ -1,9 +1,9 @@
 from chars import chars
 from team import Team
 class Pawn():
-    def __init__(self, square, direction, team):
-        self.team = team
-        self.sq = square
+    def __init__(self, direction):
+        self.team = None
+        self.place = None
         self.name = 'Pawn'
         self.moved = False
         self.char = chars[self.name]
@@ -12,24 +12,24 @@ class Pawn():
     def moves(self):
         if self.dir > 0:
             #regular orientation
-            m = [sq for sq in [self.sq.u, self.sq.ur, self.sq.ul] if (sq.piece and sq.piece.team == self.team)]
+            m = [sq for sq in [self.place.u, self.place.ur, self.place.ul] if (sq.piece and sq.piece.team == self.team)]
             #move two on first move
-            if ((self.sq.d.d is None) and (self.sq.u is None) and (self.sq.u.u.team != self.team)):
-                m.append(self.sq.u.u)
+            if ((self.place.d.d is None) and (self.place.u is None) and (self.place.u.u.team != self.team)):
+                m.append(self.place.u.u)
 
         else:
             #reverse orientation 
-            m = [sq for sq in [self.sq.d, self.sq.dr, self.sq.dl] if (sq.piece and sq.piece.team == self.team)]
+            m = [sq for sq in [self.place.d, self.place.dr, self.place.dl] if (sq.piece and sq.piece.team == self.team)]
             #move two on first move
-            if ((self.sq.u.u is None) and (self.sq.d is None) and (self.sq.d.d.team != self.team)):
-                m.append(self.sq.d.d)
+            if ((self.place.u.u is None) and (self.place.d is None) and (self.place.d.d.team != self.team)):
+                m.append(self.place.d.d)
 
         return m
 
 class Rook():
-    def __init__(self, square, direction, team):
-        self.team = team
-        self.sq = square
+    def __init__(self, direction):
+        self.team = None
+        self.place = None
         self.name = 'rook'
         self.moved = False
         self.char = chars[self.name]
@@ -38,7 +38,7 @@ class Rook():
     def moves(self): 
         m = []
         for d in ['r', 'l', 'u', 'd']:
-            sq = getattr(self.sq, d)
+            sq = getattr(self.place, d)
             while (sq is not None) and (not sq.piece):
                 m.append(sq)
                 sq = getattr(sq, d) #next sq (square)
@@ -47,9 +47,9 @@ class Rook():
 
 
 class Knight():
-    def __init__(self, square, direction, team):
-        self.team = team
-        self.sq = square
+    def __init__(self, direction):
+        self.team = None
+        self.place = None
         self.name = 'knight'
         self.moved = False
         self.char = chars[self.name]
@@ -58,7 +58,7 @@ class Knight():
     def moves(self): 
         m = []
         for d1, d2 in zip(['u', 'u', 'd', 'd', 'l', 'l', 'r', 'r'], ['l', 'r', 'l', 'r', 'u', 'd', 'u', 'd']):
-            s1 = getattr(self.sq, d1)
+            s1 = getattr(self.place, d1)
             if s1:
                 s2 = getattr(s1, d1)
                 if s2:
@@ -68,9 +68,9 @@ class Knight():
         return m
 
 class Bishop():
-    def __init__(self, square, direction, team):
-        self.team = team
-        self.sq = square
+    def __init__(self, direction):
+        self.team = None
+        self.place = None
         self.name = 'bishop'
         self.moved = False
         self.char = chars[self.name]
@@ -79,16 +79,16 @@ class Bishop():
     def moves(self): 
         m = []
         for d in ['ur', 'ul', 'dr', 'dl']:
-            sq = getattr(self.sq, d)
+            sq = getattr(self.place, d)
             while (sq is not None) and (not sq.piece):
                 m.append(sq)
                 sq = getattr(sq, d) #next sq (square)
         return m
 
 class Queen():
-    def __init__(self, square, direction, team):
-        self.team = team
-        self.sq = square
+    def __init__(self, direction):
+        self.team = None
+        self.place = None
         self.name = 'queen'
         self.moved = False
         self.char = chars[self.name]
@@ -97,7 +97,7 @@ class Queen():
     def moves(self):
         m = []
         for d in ['r', 'l', 'u', 'd', 'ur', 'ul', 'dr', 'dl']:
-            sq = getattr(self.sq, d)
+            sq = getattr(self.place, d)
             while (sq is not None) and (not sq.piece):
                 m.append(sq)
                 sq = getattr(sq, d) #next sq (square)
@@ -105,9 +105,9 @@ class Queen():
         
 
 class King():
-    def __init__(self, square, direction, team):
-        self.team = team
-        self.sq = square
+    def __init__(self, direction):
+        self.team = None
+        self.place = None
         self.name = 'king'
         self.moved = False
         self.char = chars[self.name]
@@ -126,7 +126,7 @@ class King():
     def moves(self): 
         m = []
         for d in ['r', 'l', 'u', 'd', 'ur', 'ul', 'dr', 'dl']:
-            sq = getattr(self.sq, d)
+            sq = getattr(self.place, d)
             if (sq is not None) and (not sq.piece) and (not self.check(sq)):
                 m.append(sq)
         return m 
