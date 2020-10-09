@@ -48,28 +48,29 @@ class Board():
 
 
     def create_squares(self):
-        for row in range(8):
-            self.grid[row] = {}
-            for col in range(8):
-                self.grid[row][col] = Square()
+        cols = list('abcdefgh')
+        for col in cols:
+            self.grid[col] = {}
+            for row in range(8):
+                self.grid[col][row] = Square()
 
         #neighbors
         #right
-        for col in range(7):
+        for i,col in enumerate(cols[:7]):
             for row in range(8):
-                self.grid[row][col].r = self.grid[row][col+1]
+                self.grid[col][row].r = self.grid[cols[i+1]][row]
         #left
-        for col in range(1,8):
+        for i,col in enumerate(cols[1:8]):
             for row in range(8):
-                self.grid[row][col].l = self.grid[row][col-1]
+                self.grid[col][row].l = self.grid[cols[i-1]][row]
         #up
         for row in range(7):
-            for col in range(8):
-                self.grid[row][col].u = self.grid[row+1][col]
+            for col in cols:
+                self.grid[col][row].u = self.grid[col][row+1]
         #down
         for row in range(1, 8):
-            for col in range(8):
-                self.grid[row][col].d = self.grid[row-1][col]
+            for col in cols:
+                self.grid[col][row].d = self.grid[col][row-1]
 
 
     def capture(self, piece):

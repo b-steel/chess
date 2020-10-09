@@ -15,6 +15,8 @@ class Square():
         self.l = None
         self.u = None
         self.d = None
+        self.col = None
+        self.row = None
 
     def add_piece(self, piece):
         assert self.piece is None
@@ -68,3 +70,6 @@ class Square():
     @property
     def ld(self):
         return self.dl()
+
+    def __str__(self):
+        return f'Square at {self.col}{self.row} with piece {self.piece.name if self.piece else self.piece}'
