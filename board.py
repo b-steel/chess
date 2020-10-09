@@ -53,7 +53,11 @@ class Board():
         for col in cols:
             self.grid[col] = {}
             for row in range(8):
-                self.grid[col][row] = Square()
+                sq = Square()
+                sq.row = row
+                sq.col = col
+                self.grid[col][row] = sq
+
 
         #neighbors
         #right
