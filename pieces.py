@@ -66,7 +66,12 @@ class Bishop():
         self.dir = direction
 
     def moves(self): 
-        pass
+        m = []
+        for d in ['ur', 'ul', 'dr', 'dl']:
+            sq = getattr(self.sq, d)
+            while (sq is not None) and (not sq.piece):
+                m.append(sq)
+                sq = getattr(sq, d) #next sq (square)
 
 class Queen():
     def __init__(self, square, direction, team):
