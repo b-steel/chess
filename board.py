@@ -13,42 +13,43 @@ class Board():
         self.black.opponent = self.white
         self.create_squares()
         self.create_pieces()
+        self.cols = list('abcdefgh')
 
 
     def create_pieces(self):
         for team, f_row, b_row, direction  in zip([self.black, self.white], [1, 6], [0, 7], [1, -1]):
             #pawns
-            for col in range(8):
+            for col in self.cols:
                 p = Pawn(direction)
                 team.add_piece(p)
-                self.grid[f_row][col].add_piece(p)
+                self.grid[col][f_row].add_piece(p)
 
             #rook
-            for col in [0, 7]:
+            for col in ['a', 'h']:
                 p = Rook(direction)
                 team.add_piece(p)
-                self.grid[b_row][col].add_piece(p)
+                self.grid[col][b_row].add_piece(p)
 
             #knight
-            for col in [1, 6]:
+            for col in ['b', 'g']:
                 p = Knight(direction)
                 team.add_piece(p)
-                self.grid[b_row][col].add_piece(p)
+                self.grid[col][b_row].add_piece(p)
 
             #bishop
-            for col in [2, 5]:
+            for col in ['c', 'f']:
                 p = Bishop(direction)
                 team.add_piece(p)
-                self.grid[b_row][col].add_piece(p)
+                self.grid[col][b_row].add_piece(p)
             
             #queen king
-            for col, piece in zip([3,4], [Queen(direction), King(direction)]):
+            for col, piece in zip(['d', 'e'], [Queen(direction), King(direction)]):
                 team.add_piece(piece)      
-                self.grid[b_row][col].add_piece(piece)
+                self.grid[col][b_row].add_piece(piece)
 
 
     def create_squares(self):
-        cols = list('abcdefgh')
+        cols = self.cols
         for col in cols:
             self.grid[col] = {}
             for row in range(8):
