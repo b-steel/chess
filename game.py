@@ -1,5 +1,7 @@
 from board import Board
-
+WrongTeamError = 'That piece does not belong to you'
+NoPieceError = 'There is no piece there\'t move there'
+NotAMoveError = 'That piece can
 class Game():
     def __init__(self):
         self.board = Board()
@@ -23,10 +25,11 @@ class Game():
                 assert srow < 8
                 assert erow < 8
                 move =  ((scol, srow), (ecol, erow))
-                if self._check_move(move):
+                good = self._check_move(move):
+                if good is True
                     return move
                 else:
-                    print(f'{choice} is not a valid move')
+                    print(good)
         
             except (ValueError, AssertionError) as e:
                 print(f'{choice} is not a valid input')
@@ -55,7 +58,12 @@ class Game():
             if piece.team is self.teams[self.player()]:
                 if end_sq in piece.moves():
                     return True
-        return False
+                else:
+                    return NotAMoveError
+            else: 
+                return WrongTeamError
+        else:
+            return NoPieceError
 
 
     def show(self):
