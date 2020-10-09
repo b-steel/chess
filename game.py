@@ -1,7 +1,7 @@
 from board import Board
 from pieces import King
 WrongTeamError = 'That piece does not belong to you'
-NoPieceError = 'There is no piece there\'t move there'
+NoPieceError = 'There is no piece there'
 NotAMoveError = 'That piece cannot move there'
 CheckError = 'That move would put you in Check'
 class Game():
@@ -44,31 +44,19 @@ class Game():
     def prompt(self):
         '''prompts the current player for input'''
         while True:
-            choice = input(f'{self.teams[self.player()].color.capitalize()}, please enter a move in the form of start,finish (ex: a1,a3)\n')
-            cols = list('abcdefgh')
+            choice = input(f'{self.teams[self.player()].color.capitalize()}, please enter a move in the form of start,finish (ex: a1,a3) or start finish (ex: b4 g2)\n')
             if choice.lower() == 'save':
                 self.save_game()
                 return 'save'
             else:
-                try:
-                    s,e = choice.lower().split(',')
-                    scol, srow = list(s.lstrip().rstrip())
-                    ecol, erow = list(e.lstrip().rstrip())
-                    
-                    assert scol in cols
-                    assert ecol in cols
-                    srow = int(srow)
-                    erow = int(erow)
-                    assert srow < 8
-                    assert erow < 8
-                    move =  ((scol, srow), (ecol, erow))
+                move = self.parse_input(choice)
+                if move:
                     good = self._check_move(move)
                     if good is True:
                         return move
                     else:
                         print(good)
-            
-                except (ValueError, AssertionError) as e:
+                else:
                     print(f'{choice} is not a valid input')
 
         
@@ -80,6 +68,30 @@ class Game():
     def other(self):
         '''returns the other player'''
         return (self.turn + 1)%2
+    
+    def parse_input(self, inp):
+        cols = list('abcdefgh')
+        try:
+            if ',' in inp:
+                s,e = inp.lower().split(',')
+            elif ' ' in inp:
+                s,e = inp.lower().split(' ')
+            else:
+                raise ValueError
+            scol, srow = list(s.lstrip().rstrip())
+            ecol, erow = list(e.lstrip().rstrip())
+            
+            assert scol in cols
+            assert ecol in cols
+            srow = int(srow)
+            erow = int(erow)
+            assert srow < 8
+            assert erow < 8
+            return ((scol, srow), (ecol, erow))
+        
+    
+        except (ValueError, AssertionError) as e:
+            return None
 
     def _check_move(self, move):
         '''Check if the piece belongs to the player and is valid'''
@@ -97,6 +109,8 @@ class Game():
                     return CheckError
             else:
                 if piece.team is self.teams[self.player()]:
+                    print(piece)
+                    print(piece.moves())
                     if end_sq in piece.moves():
                         return True
                     else:
