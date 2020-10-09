@@ -17,7 +17,7 @@ class Square():
 
     def add_piece(self, piece):
         assert self.piece is None
-        self.pieces = piece
+        self.piece = piece
         piece.place = self
     
     @property

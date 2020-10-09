@@ -74,11 +74,36 @@ class Board():
 
     def capture(self, piece):
         '''adds piece to the captured list'''
-        pass
+        if piece.team is self.black:
+            self.dead_black.add_piece(piece)
+        else:
+            self.dead_white.add_piece(piece)
+
+    def check_move(self, move):
+        start = self.grid[move[0][0]][move[0][1]]
+        end = self.grid[move[1][0]][move[1][1]]
+        p = start.piece
+        if end in p.moves():
+            return True
+        return False
+
 
     def move(self, move):
-        '''Moves the piece from start to end'''
-        pass
+        '''Moves the piece from start to end. Assumes valid move
+        
+        move is (start(row,col), end(row,col))'''
+        start = self.grid[move[0][0]][move[0][1]]
+        end = self.grid[move[1][0]][move[1][1]]
+        p = start.piece
+        if end.piece:
+            if end.piece.team is self.black:
+                self.dead_black.add_piece(end.piece)
+            else:
+                self.dead_white.add_piece(end.piece)
+        end.add_piece(p)
+        start.piece = None
+        
+        
 
 
     def __str__(self):
