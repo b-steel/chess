@@ -6,7 +6,7 @@ class Pawn():
         self.place = None
         self.name = 'pawn'
         self.moved = False
-        self.char = chars[self.name]
+        self.char = None
         self.dir = direction
 
     def moves(self):
@@ -32,7 +32,7 @@ class Rook():
         self.place = None
         self.name = 'rook'
         self.moved = False
-        self.char = chars[self.name]
+        self.char = None
         self.dir = direction
 
     def moves(self): 
@@ -52,7 +52,7 @@ class Knight():
         self.place = None
         self.name = 'knight'
         self.moved = False
-        self.char = chars[self.name]
+        self.char = None
         self.dir = direction
 
     def moves(self): 
@@ -73,7 +73,7 @@ class Bishop():
         self.place = None
         self.name = 'bishop'
         self.moved = False
-        self.char = chars[self.name]
+        self.char = None
         self.dir = direction
 
     def moves(self): 
@@ -91,7 +91,7 @@ class Queen():
         self.place = None
         self.name = 'queen'
         self.moved = False
-        self.char = chars[self.name]
+        self.char = None
         self.dir = direction
 
     def moves(self):
@@ -110,7 +110,7 @@ class King():
         self.place = None
         self.name = 'king'
         self.moved = False
-        self.char = chars[self.name]
+        self.char = None
         self.dir = direction
     
     def check(self, square):

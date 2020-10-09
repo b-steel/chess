@@ -3,8 +3,8 @@ from places import Captured, Square
 from team import Team
 class Board():
     def __init__(self):
-        self.black = Team()
-        self.white = Team()
+        self.black = Team('black')
+        self.white = Team('white')
         self.grid = {}
         self.dead_white = Captured()
         self.dead_black = Captured()
