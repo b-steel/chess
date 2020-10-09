@@ -1,4 +1,5 @@
 from chars import chars
+from team import Team
 class Pawn():
     def __init__(self, square, direction, team):
         self.team = team
@@ -112,8 +113,11 @@ class King():
         self.char = chars[self.name]
         self.dir = direction
     
-    def check(self, sqare = self.sq):
-        pass
+    def check(self, square):
+        for piece in self.team.opponent.pieces:
+            if square in piece.moves():
+                return True
+        return False
 
 
     def checkmate(self):
