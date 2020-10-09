@@ -73,7 +73,7 @@ class Bishop():
         self.name = 'bishop'
         self.moved = False
         self.char = chars[self.name]
-        self.dir = digitrection
+        self.dir = direction
 
     def moves(self): 
         m = []
@@ -93,8 +93,15 @@ class Queen():
         self.char = chars[self.name]
         self.dir = direction
 
-    def moves(self): 
-        pass
+    def moves(self):
+        m = []
+        for d in ['r', 'l', 'u', 'd', 'ur', 'ul', 'dr', 'dl']:
+            sq = getattr(self.sq, d)
+            while (sq is not None) and (not sq.piece):
+                m.append(sq)
+                sq = getattr(sq, d) #next sq (square)
+        return m 
+        
 
 class King():
     def __init__(self, square, direction, team):
