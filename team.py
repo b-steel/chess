@@ -4,6 +4,7 @@ class Team():
         self.pieces = []
         self.opponent = None
         self.color = color
+        self.king = None
 
     def add_piece(self, p):
         self.pieces.append(p)

@@ -46,6 +46,8 @@ class Board():
             for col, piece in zip(['d', 'e'], [Queen(direction), King(direction)]):
                 team.add_piece(piece)      
                 self.grid[col][b_row].add_piece(piece)
+                if isinstance(piece, King):
+                    team.king = piece
 
 
     def create_squares(self):

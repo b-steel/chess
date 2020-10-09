@@ -148,7 +148,7 @@ class King(Piece):
         m = []
         for d in ['r', 'l', 'u', 'd', 'ur', 'ul', 'dr', 'dl']:
             sq = getattr(self.place, d)
-            if sq and (not sq.piece or sq.piece.team != self.team) and (not self.check(sq)):
+            if sq and (not sq.piece or sq.piece.team != self.team):
                 m.append(sq)
         return m 
 
