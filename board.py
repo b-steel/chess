@@ -48,6 +48,7 @@ class Board():
                 self.grid[col][b_row].add_piece(piece)
                 if isinstance(piece, King):
                     team.king = piece
+                    piece.board = self
 
 
     def create_squares(self):
@@ -105,10 +106,19 @@ class Board():
         start = self.grid[move[0][0]][move[0][1]]
         end = self.grid[move[1][0]][move[1][1]]
         p = start.piece
+        p.moved = True
         if end.piece:
-            self.capture(end.piece)
-        end.add_piece(p)
-        start.piece = None
+            if isinstance(p, King) and isinstance(end.piece, Rook) and p.team == end.piece.team and not end.piece.moved:
+                #castle
+                start.add_piece(end.piece) #put castle in king spot
+                end.add_piece(p) # put king in castle spot
+            else:  
+                self.capture(end.piece)
+                end.add_piece(p)
+                start.piece = None
+        else:
+            end.add_piece(p)
+            start.piece = None
         
     def get_text(self, col, row):
         return self.grid[col][row].piece.char if self.grid[col][row].piece else '+'

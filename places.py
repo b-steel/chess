@@ -19,7 +19,6 @@ class Square():
         self.row = None
 
     def add_piece(self, piece):
-        assert self.piece is None
         self.piece = piece
         piece.place = self
     

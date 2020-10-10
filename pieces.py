@@ -1,5 +1,6 @@
 from chars import chars
 from team import Team
+from copy import deepcopy
 class Piece():
     def __init__(self):
         self.team = None
@@ -133,6 +134,8 @@ class King(Piece):
         self.moved = False
         self.char = None
         self.dir = direction
+        self.board = None
+        self.tester = None
     
     def check(self, square):
         for piece in self.team.opponent.pieces:
@@ -142,7 +145,25 @@ class King(Piece):
 
 
     def checkmate(self):
-        return self.moves() is []
+        def threat():
+            for piece in self.team.opponent.pieces:
+                if self.place in piece.moves():
+                    return piece
+            return None
+
+        for mv in self.moves():
+            if not self.check(mv):
+                return False
+
+        threat = threat()
+        if threat is not None:
+            for piece in self.team.pieces:
+                if threat.place in piece.moves():
+                    return False
+        else:
+            return True
+        
+            
 
     def moves(self): 
         m = []
@@ -150,8 +171,11 @@ class King(Piece):
             sq = getattr(self.place, d)
             if sq and (not sq.piece or sq.piece.team != self.team):
                 m.append(sq)
+        m.extend(self.castle())
         return m 
 
     def castle(self):
-        '''returns if you can castle'''
-        pass
+        '''returns the rooks you can castle with '''
+        if self.moved: return []
+        return [p for p in self.team.pieces if isinstance(p, Rook) and not p.moved]
+        
