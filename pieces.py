@@ -126,55 +126,32 @@ class Queen(Piece):
         
 
 class King(Piece):
-    def __init__(self, direction):
-        self.team = None
-        self.place = None
-        self.name = 'king'
+    def __init__(self, player, place):
+        self.player = player
+        self.place = place
         self.moved = False
-        self.char = None
-        self.dir = direction
-        self.board = None
-        self.tester = None
+        self.name = 'rook'
+        self.char = chars[self.player.color][self.name]
     
     def check(self, square):
-        for piece in self.team.opponent.pieces:
+        for piece in self.player.opponent.pieces:
             if square in piece.moves():
                 return True
         return False
-
-
-    def checkmate(self):
-        def threat():
-            for piece in self.team.opponent.pieces:
-                if self.place in piece.moves():
-                    return piece
-            return None
-
-        for mv in self.moves():
-            if not self.check(mv):
-                return False
-
-        threat = threat()
-        if threat is not None:
-            for piece in self.team.pieces:
-                if threat.place in piece.moves():
-                    return False
-        else:
-            return True
-        
             
-
-    def moves(self): 
+    def available_moves(self, board):
+        place = self.place
         m = []
         for d in ['r', 'l', 'u', 'd', 'ur', 'ul', 'dr', 'dl']:
-            sq = getattr(self.place, d)
-            if sq and (not sq.piece or sq.piece.team != self.team):
-                m.append(sq)
+            sq = getattr(place, d)
+            if sq and (not sq.piece or sq.piece.player != self.player):
+                if not self.check(sq):
+                    m.append(sq)
         m.extend(self.castle())
         return m 
 
     def castle(self):
         '''returns the rooks you can castle with '''
         if self.moved: return []
-        return [p for p in self.team.pieces if isinstance(p, Rook) and not p.moved]
+        return [p for p in self.player.pieces if isinstance(p, Rook) and not p.moved and not self.check(p.place)]
         
