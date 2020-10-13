@@ -4,7 +4,7 @@ from move import Move
 class Piece():
     
     def __str__(self):
-        return f'{self.team.color} {self.name.capitalize()} at {self.place.col}{self.place.row}'
+        return f'{self.player.color.capitalize()} {self.name.capitalize()} at {self.place.col}{self.place.row}'
 
 class Pawn(Piece):
     def __init__(self, player):
@@ -27,15 +27,15 @@ class Pawn(Piece):
                 m.append(place.u.u)
 
             #En Passant Left
-            if isinstance(place.l.piece, Pawn) and place.l.piece.player != self.player: #enemy pawn to the left
-                if board.last_turn.move.piece is place.l.piece: #that pawn was moved last turn
-                    if board.last_turn.move.start is place.l.d.d: #the pawn moved two spaces
+            if place.l and place.l.piece and isinstance(place.l.piece, Pawn) and place.l.piece.player != self.player: #enemy pawn to the left
+                if board.last_turn.piece is place.l.piece: #that pawn was moved last turn
+                    if board.last_turn.start is place.l.u.u: #the pawn moved two spaces
                         m.append(place.ul)
 
             #En Passant Right
-            if isinstance(place.r.piece, Pawn) and place.r.piece.player != self.player: #enemy pawn to the left
-                if board.last_turn.move.piece is place.r.piece: #that pawn was moved last turn
-                    if board.last_turn.move.start is place.r.d.d: #the pawn moved two spaces
+            if place.r and place.r.piece and isinstance(place.r.piece, Pawn) and place.r.piece.player != self.player: #enemy pawn to the right
+                if board.last_turn.piece is place.r.piece: #that pawn was moved last turn
+                    if board.last_turn.start is place.r.u.u: #the pawn moved two spaces
                         m.append(place.ur)
         else:
             #OTHER DIRECTION
@@ -48,15 +48,15 @@ class Pawn(Piece):
                 m.append(place.d.d)
 
             #En Passant Left
-            if isinstance(place.l.piece, Pawn) and place.l.piece.player != self.player: #enemy pawn to the left
-                if board.last_turn.move.piece is place.l.piece: #that pawn was moved last turn
-                    if board.last_turn.move.start is place.l.u.u: #the pawn moved two spaces
+            if place.l and place.l.piece and isinstance(place.l.piece, Pawn) and place.l.piece.player != self.player: #enemy pawn to the left
+                if board.last_turn.piece is place.l.piece: #that pawn was moved last turn
+                    if board.last_turn.start is place.l.d.d: #the pawn moved two spaces
                         m.append(place.dl)
 
-            #En Passant Righ
-            if isinstance(place.r.piece, Pawn) and place.r.piece.player != self.player: #enemy pawn to the left
-                if board.last_turn.move.piece is place.r.piece: #that pawn was moved last turn
-                    if board.last_turn.move.start is place.r.u.u: #the pawn moved two spaces
+            #En Passant Right
+            if place.r and place.r.piece and isinstance(place.r.piece, Pawn) and place.r.piece.player != self.player: #enemy pawn to the right
+                if board.last_turn.piece is place.r.piece: #that pawn was moved last turn
+                    if board.last_turn.start is place.r.d.d: #the pawn moved two spaces
                         m.append(place.dr)
         return m
 

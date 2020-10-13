@@ -11,8 +11,13 @@ class Board():
         self.cols = list('abcdefgh')
         self.white.opponent = self.black
         self.black.opponent = self.white
+        self.moves = {}
         self.create_squares()
         self.create_pieces()
+
+    @property
+    def last_turn(self):
+        return self.moves[len(self.moves)-1]
 
     def create_squares(self):
         cols = self.cols
@@ -150,6 +155,7 @@ class Board():
         else:
             start.piece = None
         end.add_piece(piece) # don't forget to put the piece there
+        self.moves[len(self.moves)] = move
         
     def get_text(self, col, row):
         return self.grid[col][row].piece.char if self.grid[col][row].piece else '+'
@@ -184,6 +190,9 @@ class Board():
 
     def __str__(self):
         return self._print_text()
+
+    def _make_move(self, t):
+        return Move(self.grid[t[0]][int(t[1])], self.grid[t[2]][int(t[3])])
 
 
 # b = Board()
