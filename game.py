@@ -10,98 +10,9 @@ NotAMoveError = 'That piece cannot move there'
 CheckError = 'That move would put you in Check'
 
 class Game():
-    class RuleChecker():
-        def __init__(self, board):
-            self.board = board
-            self.white = board.white
-            self.black = board.black
-
-        @property
-        def checkmate(self):
-            def in_checkmate(player):
-                def threats(king):
-                    '''Returns the piece(s) that has/have the king in check'''
-                    p = []
-                    for piece in king.player.opponent.pieces:
-                        if king.place in piece.moves():
-                            return p.append(piece)
-                    return p
-                
-                def move_out_of_check(king):
-                    #can the king move out of danger
-                    for mv in king.moves():
-                        if not king.check(mv):
-                            return True
-                    return False
-                
-                king = player.king
-                if move_out_of_check(king):
-                    return False
-
-                threat_pieces = threats(player.king)
-                if threat_pieces:
-                    if len(threat_pieces) == 1:
-                        threat = threat_pieces[0]
-                        for piece in player.pieces:
-                            #can one of my pieces take out the threat piece
-                            if threat.place in piece.moves():
-                                return False
-                            elif isinstance(threat_piece, (Bishop, Rook, Queen)):
-                                #can a piece block the threat
-                                for destination in piece.moves():
-                                    if destination.piece:
-                                        #we only care about blank spaces
-                                        pass
-                                    else:
-                                        to_return = piece.place
-                                        test_move = Move(piece, to_return, destination)
-                                        reverse_move = Move(piece, destination, to_return)
-                                        self.move(test_move)
-                                        if not king.check():
-                                            self.move(reverse_move)
-                                            return False
-                                        self.move(reverse_move)
-                    else:
-                        #double check, only way out is with the king moving, we took care of that above
-                        pass       
-                return True
-            if in_checkmate(self.black):
-                return self.black
-            elif in_checkmate(self.white):
-                return self.white
-            return None
-
-        @property
-        def check(self):
-            def in_check(player):
-                if player.king.check(player.king.place):
-                    return True
-                return False
-            if in_check(self.white):
-                return self.white
-            elif in_check(self.black):
-                return self.black
-            return None
-
-    
-        def en_passant_capture(self):
-            move = self.board.last_turn
-            piece = move.piece
-            if isinstance(piece, Pawn):
-                if move.start.col != move.end.col: #diagonal == capture
-                    if not move.capture: #no piece caputured
-                        if piece.player.direction == 1:
-                            caputured_pawn = move.end.d.piece
-                        else:
-                            caputured_pawn = move.end.u.piece
-                        #set the record straight in the history
-                        move.capture = caputured_pawn
-                        move.piece.player.capture(caputured_pawn)
-    
     def __init__(self):
         self.board = Board()
         self.turn = 0
-        self.rulechecker = RuleChecker(self)
         self.players = {1: self.board.black, 2: self.board.white}
    
     def delete_file(self):
@@ -126,11 +37,11 @@ class Game():
 
     @property
     def game_over(self):
-        return self.rulechecker.checkmate
+        return self.board.rulechecker.checkmate
 
     @property
     def in_check(self):
-        return self.rulechecker.check
+        return self.board.rulechecker.check
 
     @property    
     def player(self):
@@ -173,7 +84,7 @@ class Game():
     
         if piece:    
             if piece.player is self.player:
-                if end in piece.moves():
+                if end in piece.available_moves(self.board):
                     return True
                 else:
                     return NotAMoveError
@@ -237,4 +148,3 @@ class Game():
         if again.lower() == 'y':
             return 'again'
         return 'done'
-

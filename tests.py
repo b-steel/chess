@@ -59,10 +59,11 @@ with description('board') as self:
 
         captured_pawn = b.grid['b'][4].piece
         m3 = b._make_move('a4b5')
+        b.move(m3)
         
 
         expect(b.grid['b'][4].piece).to(be(None))
-        expect(b.white.captured).to(contain(captured_pawn))
+        expect(b.black.captured).to(contain(captured_pawn))
     
 
 

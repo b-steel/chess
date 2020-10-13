@@ -156,10 +156,15 @@ class King(Piece):
         self.name = 'king'
         self.char = chars[self.player.color][self.name]
     
-    def check(self, square):
+    def check(self, square, board):
         for piece in self.player.opponent.pieces:
-            if square in piece.moves():
-                return True
+            if isinstance(piece, King):
+                for d in ['u', 'd', 'l', 'r', 'ur', 'ul', 'dr', 'dl']:
+                    if getattr(piece.place, d) is self.place:
+                        return True
+            else:
+                if square in piece.available_moves(board):
+                    return True
         return False
             
     def available_moves(self, board):
@@ -168,13 +173,15 @@ class King(Piece):
         for d in ['r', 'l', 'u', 'd', 'ur', 'ul', 'dr', 'dl']:
             sq = getattr(place, d)
             if sq and (not sq.piece or sq.piece.player != self.player):
-                if not self.check(sq):
-                    m.append(sq)
-        m.extend(self.castle())
+                m.append(sq)
+        m.extend(self.castle(board))
+        for sq in m:
+            if self.check(sq, board):
+                m.remove(sq)
         return m 
 
-    def castle(self):
+    def castle(self, board):
         '''returns the rooks you can castle with '''
         if self.moved: return []
-        return [p for p in self.player.pieces if isinstance(p, Rook) and not p.moved and not self.check(p.place)]
+        return [p for p in self.player.pieces if isinstance(p, Rook) and not p.moved]
         

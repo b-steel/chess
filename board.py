@@ -3,6 +3,104 @@ from places import Square
 from player import Player
 from copy import deepcopy
 from move import Move
+class RuleChecker():
+    def __init__(self, board):
+        self.board = board
+        self.white = board.white
+        self.black = board.black
+
+    @property
+    def checkmate(self):
+        def in_checkmate(player):
+            def threats(king):
+                '''Returns the piece(s) that has/have the king in check'''
+                p = []
+                for piece in king.player.opponent.pieces:
+                    if king.place in piece.available_moves(self.board):
+                        return p.append(piece)
+                return p
+            
+            def move_out_of_check(king):
+                #can the king move out of danger
+                for sq in king.available_moves(self.board):
+                    if not king.check(sq, self.board):
+                        return True
+                return False
+            
+            def between (place, start, end):
+                cols = list('abcdefgh')
+                if start.row <= place.row <= end.row or end.row <= place.row <= start.row:
+                    pcol = cols.index(place.col)
+                    scol = cols.index(start.col)
+                    ecol = cols.index(end.col)
+                    if scol <= pcol <= ecol or ecol <= pcol <= scol:
+                        return True
+                return False
+
+            
+            king = player.king
+            if move_out_of_check(king):
+                return False
+
+            threat_pieces = threats(player.king)
+            if threat_pieces:
+                if len(threat_pieces) == 1:
+                    threat = threat_pieces[0]
+                    for piece in player.pieces:
+                        #can one of my pieces take out the threat piece
+                        if threat.place in piece.available_moves(self.board):
+                            return False
+                        elif isinstance(threat_piece, (Bishop, Rook, Queen)):
+                            #can a piece block the threat
+                            for destination in piece.available_moves(self.board):
+                                if destination.piece:
+                                    #we only care about blank spaces
+                                    pass
+                                elif between(destination, threat.place, king.place):
+                                    to_return = piece.place
+                                    test_move = Move(piece, to_return, destination)
+                                    reverse_move = Move(piece, destination, to_return)
+                                    self.move(test_move)
+                                    if not king.check():
+                                        self.move(reverse_move)
+                                        return False
+                                    self.move(reverse_move)
+                else:
+                    #double check, only way out is with the king moving, we took care of that above
+                    pass       
+            return True
+        if in_checkmate(self.black):
+            return self.black
+        elif in_checkmate(self.white):
+            return self.white
+        return None
+
+    @property
+    def check(self):
+        def in_check(player):
+            if player.king.check(player.king.place, self.board):
+                return True
+            return False
+        if in_check(self.white):
+            return self.white
+        elif in_check(self.black):
+            return self.black
+        return None
+
+    def en_passant_capture(self):
+        move = self.board.last_turn
+        piece = move.piece
+        if isinstance(piece, Pawn):
+            if move.start.col != move.end.col: #diagonal == capture
+                if not move.capture: #no piece caputured
+                    if piece.player.direction == 1:
+                        caputured_pawn = move.end.d.piece
+                    else:
+                        caputured_pawn = move.end.u.piece
+                    #set the record straight in the history
+                    move.capture = caputured_pawn
+                    move.piece.player.capture(caputured_pawn)
+
 class Board():
     def __init__(self):
         self.black = Player('black')
@@ -12,6 +110,7 @@ class Board():
         self.white.opponent = self.black
         self.black.opponent = self.white
         self.moves = {}
+        self.rulechecker = RuleChecker(self)
         self.create_squares()
         self.create_pieces()
 
@@ -101,6 +200,8 @@ class Board():
             start.piece = None
         end.add_piece(piece) # don't forget to put the piece there
         self.moves[len(self.moves)] = move
+        self.rulechecker.en_passant_capture()
+
         
     def get_text(self, col, row):
         return self.grid[col][row].piece.char if self.grid[col][row].piece else '+'
