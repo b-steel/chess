@@ -78,62 +78,7 @@ class Board():
                 self.grid[col][b_row].add_piece(piece)
                 if isinstance(piece, King):
                     player.king = piece
-
-    def checkmate(self):
-        def threats(king):
-            '''Returns the piece(s) that has/have the king in check'''
-            p = []
-            for piece in king.player.opponent.pieces:
-                if king.place in piece.moves():
-                    return p.append(piece)
-            return p
-        
-        def move_out_of_check(king):
-            #can the king move out of danger
-            for mv in king.moves():
-                if not king.check(mv):
-                    return True
-            return False
-
-        def in_checkmate(player):
-            king = player.king
-            if move_out_of_check(king):
-                return False
-
-            threat_pieces = threats(player.king)
-            if threat_pieces:
-                if len(threat_pieces) == 1:
-                    threat = threat_pieces[0]
-                    for piece in player.pieces:
-                        #can one of my pieces take out the threat piece
-                        if threat.place in piece.moves():
-                            return False
-                        elif isinstance(threat_piece, (Bishop, Rook, Queen)):
-                            #can a piece block the threat
-                            for destination in piece.moves():
-                                if destination.piece:
-                                    #we only care about blank spaces
-                                    pass
-                                else:
-                                    to_return = piece.place
-                                    test_move = Move(piece, to_return, destination)
-                                    reverse_move = Move(piece, destination, to_return)
-                                    self.move(test_move)
-                                    if not king.check():
-                                        self.move(reverse_move)
-                                        return False
-                                    self.move(reverse_move)
-                else:
-                    #double check, only way out is with the king moving, we took care of that above
-                    pass       
-            return True
-
-        if in_checkmate(self.black):
-            return self.black
-        elif in_checkmate(self.white):
-            return self.white
-        return False
-
+   
     def move(self, move):
         '''Moves the piece from start to end. Assumes valid move
         
@@ -193,6 +138,8 @@ class Board():
 
     def _make_move(self, t):
         return Move(self.grid[t[0]][int(t[1])], self.grid[t[2]][int(t[3])])
+
+
 
 
 # b = Board()
