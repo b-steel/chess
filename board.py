@@ -2,6 +2,7 @@ from pieces import Pawn, Rook, Knight, Bishop, Queen, King
 from places import Square
 from player import Player
 from copy import deepcopy
+from move import Move
 class Board():
     def __init__(self):
         self.black = Player('black')
@@ -77,77 +78,90 @@ class Board():
                     player.king = piece
 
     def checkmate(self):
-        def threat():
-            for piece in self.player.opponent.pieces:
-                if self.place in piece.moves():
-                    return piece
-            return None
+        def threats(king):
+            '''Returns the piece(s) that has/have the king in check'''
+            p = []
+            for piece in king.player.opponent.pieces:
+                if king.place in piece.moves():
+                    return p.append(piece)
+            return p
+        
+        def move_out_of_check(king):
+            #can the king move out of danger
+            for mv in king.moves():
+                if not king.check(mv):
+                    return True
+            return False
 
-        #can the king move out of danger
-        for mv in self.moves():
-            if not self.check(mv):
+        def in_checkmate(player):
+            king = player.king
+            if move_out_of_check(king):
                 return False
 
-        threat_piece = threat()
-        if threat_piece:
-            for piece in self.player.pieces:
-                #can one of my pieces take out the threat piece
-                if threat.place in piece.moves():
-                    return False
-                #can a piece block the threat
-                elif isinstance(piece, Bishop):
-                    test = deepcopy(self)
-
-                    
-        return True
-
-    def capture(self, piece):
-        '''adds piece to the captured list'''
-        if piece.team is self.black:
-            self.dead_black.add_piece(piece)
-        else:
-            self.dead_white.add_piece(piece)
-
-    def check_move(self, move):
-        start = self.grid[move[0][0]][move[0][1]]
-        end = self.grid[move[1][0]][move[1][1]]
-        p = start.piece
-        t = self.teams[self.player]
-        
-        if end in p.moves():
+            threat_pieces = threats(player.king)
+            if threat_pieces:
+                if len(threat_pieces) == 1:
+                    threat = threat_pieces[0]
+                    for piece in player.pieces:
+                        #can one of my pieces take out the threat piece
+                        if threat.place in piece.moves():
+                            return False
+                        elif isinstance(threat_piece, (Bishop, Rook, Queen)):
+                            #can a piece block the threat
+                            for destination in piece.moves():
+                                if destination.piece:
+                                    #we only care about blank spaces
+                                    pass
+                                else:
+                                    to_return = piece.place
+                                    test_move = Move(piece, to_return, destination)
+                                    reverse_move = Move(piece, destination, to_return)
+                                    self.move(test_move)
+                                    if not king.check():
+                                        self.move(reverse_move)
+                                        return False
+                                    self.move(reverse_move)
+                else:
+                    #double check, only way out is with the king moving, we took care of that above
+                    pass       
             return True
-        return False
 
+        if in_checkmate(self.black):
+            return self.black
+        elif in_checkmate(self.white):
+            return self.white
+        return False
 
     def move(self, move):
         '''Moves the piece from start to end. Assumes valid move
         
-        move is (start(col, row), end(col, row))'''
-        start = self.grid[move[0][0]][move[0][1]]
-        end = self.grid[move[1][0]][move[1][1]]
-        p = start.piece
+        move is instance of Move class'''
+
+        start = move.start
+        end = move.end
+        piece = move.piece
+        assert piece is start.piece
+
         p.moved = True
         if end.piece:
-            if isinstance(p, King) and isinstance(end.piece, Rook) and p.team == end.piece.team and not end.piece.moved:
+            if isinstance(piece, King) and not piece.moved and isinstance(end.piece, Rook) and piece.player == end.piece.team and not end.piece.moved:
                 #castle
                 start.add_piece(end.piece) #put castle in king spot
-                end.add_piece(p) # put king in castle spot
             else:  
-                self.capture(end.piece)
-                end.add_piece(p)
+                piece.player.capture(end.piece) #Capture it
                 start.piece = None
         else:
-            end.add_piece(p)
             start.piece = None
+        end.add_piece(p) # don't forget to put the piece there
         
     def get_text(self, col, row):
         return self.grid[col][row].piece.char if self.grid[col][row].piece else '+'
 
     def get_dead(self, color):
         if color == 'b':
-            p = self.dead_black.pieces + [None]*(16-len(self.dead_black.pieces))
+            p = self.white.captured + [None]*(16-len(self.white.captured))
         else:
-            p = self.dead_white.pieces + [None]*(16-len(self.dead_white.pieces))
+            p = self.black.captured + [None]*(16-len(self.black.captured))
         return [piece.char if piece else ' ' for piece in p]
         
     def _print_text(self):
