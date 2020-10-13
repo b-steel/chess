@@ -1,57 +1,55 @@
 from chars import chars
 from team import Team
+from move import Move
 from copy import deepcopy
 class Piece():
-    def __init__(self):
-        self.team = None
-        self.place = None
-        self.name = ''
-        self.moved = False
-        self.char = None
     
     def __str__(self):
         return f'{self.name.capitalize()} at {self.place.col}{self.place.row} on team {self.team.color}'
 
 class Pawn(Piece):
-    def __init__(self, direction):
-        self.team = None
-        self.place = None
-        self.name = 'pawn'
+    def __init__(self, player, place):
+        self.player = player
+        self.place = place
         self.moved = False
-        self.char = None
-        self.dir = direction
+        self.name = 'pawn'
+        self.char = chars[self.player.color][self.name]
 
-    def moves(self):
-        if self.dir > 0:
-            #regular orientation
-            m = [sq for sq in [self.place.u] if sq and not sq.piece]
-            m.append([sq for sq in [self.place.ur, self.place.ul] if sq and sq.piece and sq.piece.team !=self.team])
-        
-            #move two on first move
-            if (self.place.d.d is None and not self.place.u.piece and not self.place.u.u.piece):
-                m.append(self.place.u.u)
 
-        else:
-            #reverse orientation 
-            m = [sq for sq in [self.place.d] if sq and not sq.piece]
-            m.append([sq for sq in [self.place.dr, self.place.dl] if sq and sq.piece and sq.piece.team !=self.team])
-        
-            #move two on first move
-            if (self.place.u.u is None and not self.place.d.piece and not self.place.d.d.piece):
-                m.append(self.place.d.d)
+    def available_moves(self, board):
+        place = self.place
+        m = [sq for sq in [place.u] if sq and not sq.piece]
+        m.append([sq for sq in [place.ur, place.ul] if sq and sq.piece and sq.piece.player != self.player])
+    
+        #move two on first move
+        if (not self.moved and not place.u.piece and not place.u.u.piece):
+            m.append(place.u.u)
+
+        #En Passant Left
+        if isinstance(place.l.piece, Pawn) and place.l.piece.player != self.player: #enemy pawn to the left
+            if board.last_turn.move.piece is place.l.piece: #that pawn was moved last turn
+                if board.last_turn.move.start is place.l.u.u: #the pawn moved two spaces
+                    m.append(place.ul)
+
+        #En Passant Righ
+        if isinstance(place.r.piece, Pawn) and place.r.piece.player != self.player: #enemy pawn to the left
+            if board.last_turn.move.piece is place.r.piece: #that pawn was moved last turn
+                if board.last_turn.move.start is place.r.u.u: #the pawn moved two spaces
+                    m.append(place.ur)
 
         return m
 
 class Rook(Piece):
-    def __init__(self, direction):
-        self.team = None
-        self.place = None
-        self.name = 'rook'
+    def __init__(self, player, place):
+        self.player = player
+        self.place = place
         self.moved = False
-        self.char = None
-        self.dir = direction
+        self.name = 'rook'
+        self.char = chars[self.player.color][self.name]
 
-    def moves(self): 
+
+    def available_moves(self, board):
+        place = self.place
         m = []
         for d in ['r', 'l', 'u', 'd']:
             sq = getattr(self.place, d)
@@ -65,13 +63,11 @@ class Rook(Piece):
 
 
 class Knight(Piece):
-    def __init__(self, direction):
-        self.team = None
-        self.place = None
-        self.name = 'knight'
+    def __init__(self, player):
+        self.player = player
         self.moved = False
-        self.char = None
-        self.dir = direction
+        self.name = 'pawn'
+        self.char = chars[self.player.color][self.name]
 
     def moves(self): 
         m = []

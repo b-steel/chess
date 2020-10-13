@@ -1,22 +1,12 @@
-class Captured():
-    def __init__(self):
-        self.pieces = []
-    
-    def add_piece(self, piece):
-        self.pieces.append(piece)
-        piece.place.piece = None
-        piece.place = self
-        piece.team.pieces.remove(piece)
-
 class Square():
-    def __init__(self):
+    def __init__(self, col, row):
         self.piece = None
         self.r = None
         self.l = None
         self.u = None
         self.d = None
-        self.col = None
-        self.row = None
+        self.col = col
+        self.row = row
 
     def add_piece(self, piece):
         self.piece = piece
