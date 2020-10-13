@@ -1,6 +1,7 @@
 from pieces import Pawn, Rook, Knight, Bishop, Queen, King
 from places import Square
 from player import Player
+from copy import deepcopy
 class Board():
     def __init__(self):
         self.black = Player('black')
@@ -45,6 +46,8 @@ class Board():
             #pawns
             for col in self.cols:
                 p = Pawn(player)
+                if player == self.player.white:
+                    p.direction = -1
                 player.add(p)
                 self.grid[col][f_row].add_piece(p)
 
@@ -73,9 +76,7 @@ class Board():
                 if isinstance(piece, King):
                     player.king = piece
 
-
-
-def checkmate(self):
+    def checkmate(self):
         def threat():
             for piece in self.player.opponent.pieces:
                 if self.place in piece.moves():
@@ -94,9 +95,11 @@ def checkmate(self):
                 if threat.place in piece.moves():
                     return False
                 #can a piece block the threat
-                elif 
-        else:
-            return True
+                elif isinstance(piece, Bishop):
+                    test = deepcopy(self)
+
+                    
+        return True
 
     def capture(self, piece):
         '''adds piece to the captured list'''

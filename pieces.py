@@ -13,29 +13,51 @@ class Pawn(Piece):
         self.moved = False
         self.name = 'pawn'
         self.char = chars[self.player.color][self.name]
+        self.direction = 1
 
 
     def available_moves(self, board):
-        place = self.place
-        m = [sq for sq in [place.u] if sq and not sq.piece]
-        m.append([sq for sq in [place.ur, place.ul] if sq and sq.piece and sq.piece.player != self.player])
-    
-        #move two on first move
-        if (not self.moved and not place.u.piece and not place.u.u.piece):
-            m.append(place.u.u)
+        if self.direction == 1:
+            place = self.place
+            m = [sq for sq in [place.u] if sq and not sq.piece]
+            m.append([sq for sq in [place.ur, place.ul] if sq and sq.piece and sq.piece.player != self.player])
+        
+            #move two on first move
+            if (not self.moved and not place.u.piece and not place.u.u.piece):
+                m.append(place.u.u)
 
-        #En Passant Left
-        if isinstance(place.l.piece, Pawn) and place.l.piece.player != self.player: #enemy pawn to the left
-            if board.last_turn.move.piece is place.l.piece: #that pawn was moved last turn
-                if board.last_turn.move.start is place.l.u.u: #the pawn moved two spaces
-                    m.append(place.ul)
+            #En Passant Left
+            if isinstance(place.l.piece, Pawn) and place.l.piece.player != self.player: #enemy pawn to the left
+                if board.last_turn.move.piece is place.l.piece: #that pawn was moved last turn
+                    if board.last_turn.move.start is place.l.d.d: #the pawn moved two spaces
+                        m.append(place.ul)
 
-        #En Passant Righ
-        if isinstance(place.r.piece, Pawn) and place.r.piece.player != self.player: #enemy pawn to the left
-            if board.last_turn.move.piece is place.r.piece: #that pawn was moved last turn
-                if board.last_turn.move.start is place.r.u.u: #the pawn moved two spaces
-                    m.append(place.ur)
+            #En Passant Right
+            if isinstance(place.r.piece, Pawn) and place.r.piece.player != self.player: #enemy pawn to the left
+                if board.last_turn.move.piece is place.r.piece: #that pawn was moved last turn
+                    if board.last_turn.move.start is place.r.d.d: #the pawn moved two spaces
+                        m.append(place.ur)
+        else:
+            #OTHER DIRECTION
+            place = self.place
+            m = [sq for sq in [place.d] if sq and not sq.piece]
+            m.append([sq for sq in [place.dr, place.dl] if sq and sq.piece and sq.piece.player != self.player])
+        
+            #move two on first move
+            if (not self.moved and not place.d.piece and not place.d.d.piece):
+                m.append(place.d.d)
 
+            #En Passant Left
+            if isinstance(place.l.piece, Pawn) and place.l.piece.player != self.player: #enemy pawn to the left
+                if board.last_turn.move.piece is place.l.piece: #that pawn was moved last turn
+                    if board.last_turn.move.start is place.l.u.u: #the pawn moved two spaces
+                        m.append(place.dl)
+
+            #En Passant Righ
+            if isinstance(place.r.piece, Pawn) and place.r.piece.player != self.player: #enemy pawn to the left
+                if board.last_turn.move.piece is place.r.piece: #that pawn was moved last turn
+                    if board.last_turn.move.start is place.r.u.u: #the pawn moved two spaces
+                        m.append(place.dr)
         return m
 
 class Rook(Piece):
