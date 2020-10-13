@@ -8,7 +8,7 @@ class Player():
         self.king = None
         self.direction = 1
 
-    def add(self, p):
+    def add_piece(self, p):
         self.pieces.append(p)
 
     def capture(self, p):

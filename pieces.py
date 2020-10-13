@@ -1,5 +1,5 @@
 from chars import chars
-from team import Team
+from player import Player
 from move import Move
 class Piece():
     
@@ -8,7 +8,7 @@ class Piece():
 
 class Pawn(Piece):
     def __init__(self, player):
-        self. = player
+        self.player = player
         self.place = None
         self.moved = False
         self.name = 'pawn'
@@ -97,8 +97,10 @@ class Knight(Piece):
         m = []
         for d1, d2 in zip(['u', 'u', 'd', 'd', 'l', 'l', 'r', 'r'], ['l', 'r', 'l', 'r', 'u', 'd', 'u', 'd']):
             s1 = getattr(place, d1)
-            if s1: s2 = getattr(s1, d1)
-                if s2: s3 = getattr(s2, d2)
+            if s1: 
+                s2 = getattr(s1, d1)
+                if s2: 
+                    s3 = getattr(s2, d2)
                     if s3 and (not s3.piece or s3.piece and s3.piece.player != self.player):
                         m.append(s3)
         return m

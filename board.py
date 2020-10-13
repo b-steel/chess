@@ -19,10 +19,7 @@ class Board():
         for col in cols:
             self.grid[col] = {}
             for row in range(8):
-                sq = Square()
-                sq.row = row
-                sq.col = col
-                self.grid[col][row] = sq
+                self.grid[col][row] = Square(col, row)
 
         #neighbors
         #right
@@ -47,9 +44,9 @@ class Board():
             #pawns
             for col in self.cols:
                 p = Pawn(player)
-                if player == self.player.white:
+                if player == self.white:
                     p.direction = -1
-                player.add(p)
+                player.add_piece(p)
                 self.grid[col][f_row].add_piece(p)
 
             #rook
@@ -142,7 +139,7 @@ class Board():
         piece = move.piece
         assert piece is start.piece
 
-        p.moved = True
+        piece.moved = True
         if end.piece:
             if isinstance(piece, King) and not piece.moved and isinstance(end.piece, Rook) and piece.player == end.piece.team and not end.piece.moved:
                 #castle
@@ -152,7 +149,7 @@ class Board():
                 start.piece = None
         else:
             start.piece = None
-        end.add_piece(p) # don't forget to put the piece there
+        end.add_piece(piece) # don't forget to put the piece there
         
     def get_text(self, col, row):
         return self.grid[col][row].piece.char if self.grid[col][row].piece else '+'
@@ -190,12 +187,9 @@ class Board():
 
 
 # b = Board()
-# b.move((('a',1), ('a',3)))
-# b.capture(b.grid['a'][0].piece)
-# b.capture(b.grid['h'][6].piece)
-# print(b.grid['b'][0])
-# print(b.grid['b'][0].piece)
-
+# b.move(Move(b.grid['a'][1], b.grid['a'][3]))
+# b.white.capture(b.grid['a'][0].piece)
+# b.black.capture(b.grid['h'][6].piece)
 # print(b)
 
         
