@@ -1,16 +1,15 @@
 from chars import chars
 from team import Team
 from move import Move
-from copy import deepcopy
 class Piece():
     
     def __str__(self):
-        return f'{self.name.capitalize()} at {self.place.col}{self.place.row} on team {self.team.color}'
+        return f'{self.team.color} {self.name.capitalize()} at {self.place.col}{self.place.row}'
 
 class Pawn(Piece):
-    def __init__(self, player, place):
-        self.player = player
-        self.place = place
+    def __init__(self, player):
+        self. = player
+        self.place = None
         self.moved = False
         self.name = 'pawn'
         self.char = chars[self.player.color][self.name]
@@ -40,9 +39,9 @@ class Pawn(Piece):
         return m
 
 class Rook(Piece):
-    def __init__(self, player, place):
+    def __init__(self, player):
         self.player = player
-        self.place = place
+        self.place = None
         self.moved = False
         self.name = 'rook'
         self.char = chars[self.player.color][self.name]
@@ -63,9 +62,9 @@ class Rook(Piece):
 
 
 class Knight(Piece):
-    def __init__(self, player, place):
+    def __init__(self, player):
         self.player = player
-        self.place = place
+        self.place = None
         self.moved = False
         self.name = 'knight'
         self.char = chars[self.player.color][self.name]
@@ -83,9 +82,9 @@ class Knight(Piece):
         return m
 
 class Bishop(Piece):
-    def __init__(self, player, place):
+    def __init__(self, player):
         self.player = player
-        self.place = place
+        self.place = None
         self.moved = False
         self.name = 'bishop'
         self.char = chars[self.player.color][self.name]
@@ -104,9 +103,9 @@ class Bishop(Piece):
         return m
 
 class Queen(Piece):
-    def __init__(self, player, place):
+    def __init__(self, player):
         self.player = player
-        self.place = place
+        self.place = None
         self.moved = False
         self.name = 'queen'
         self.char = chars[self.player.color][self.name]
@@ -126,11 +125,11 @@ class Queen(Piece):
         
 
 class King(Piece):
-    def __init__(self, player, place):
+    def __init__(self, player):
         self.player = player
-        self.place = place
+        self.place = None
         self.moved = False
-        self.name = 'rook'
+        self.name = 'king'
         self.char = chars[self.player.color][self.name]
     
     def check(self, square):

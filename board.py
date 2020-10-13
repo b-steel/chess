@@ -1,55 +1,16 @@
 from pieces import Pawn, Rook, Knight, Bishop, Queen, King
-from places import Captured, Square
-from team import Team
+from places import Square
+from player import Player
 class Board():
     def __init__(self):
-        self.black = Team('black')
-        self.white = Team('white')
+        self.black = Player('black')
+        self.white = Player('white')
         self.grid = {}
-        self.dead_white = Captured()
-        self.dead_black = Captured()
         self.cols = list('abcdefgh')
-
         self.white.opponent = self.black
         self.black.opponent = self.white
         self.create_squares()
         self.create_pieces()
-
-
-    def create_pieces(self):
-        for team, f_row, b_row, direction  in zip([self.black, self.white], [1, 6], [0, 7], [1, -1]):
-            #pawns
-            for col in self.cols:
-                p = Pawn(direction)
-                team.add_piece(p)
-                self.grid[col][f_row].add_piece(p)
-
-            #rook
-            for col in ['a', 'h']:
-                p = Rook(direction)
-                team.add_piece(p)
-                self.grid[col][b_row].add_piece(p)
-
-            #knight
-            for col in ['b', 'g']:
-                p = Knight(direction)
-                team.add_piece(p)
-                self.grid[col][b_row].add_piece(p)
-
-            #bishop
-            for col in ['c', 'f']:
-                p = Bishop(direction)
-                team.add_piece(p)
-                self.grid[col][b_row].add_piece(p)
-            
-            #queen king
-            for col, piece in zip(['d', 'e'], [Queen(direction), King(direction)]):
-                team.add_piece(piece)      
-                self.grid[col][b_row].add_piece(piece)
-                if isinstance(piece, King):
-                    team.king = piece
-                    piece.board = self
-
 
     def create_squares(self):
         cols = self.cols
@@ -60,7 +21,6 @@ class Board():
                 sq.row = row
                 sq.col = col
                 self.grid[col][row] = sq
-
 
         #neighbors
         #right
@@ -80,6 +40,63 @@ class Board():
             for col in cols:
                 self.grid[col][row].d = self.grid[col][row-1]
 
+    def create_pieces(self):
+        for player, f_row, b_row  in zip([self.black, self.white], [1, 6], [0, 7]):
+            #pawns
+            for col in self.cols:
+                p = Pawn(player)
+                player.add(p)
+                self.grid[col][f_row].add_piece(p)
+
+            #rook
+            for col in ['a', 'h']:
+                p = Rook(player)
+                player.add_piece(p)
+                self.grid[col][b_row].add_piece(p)
+
+            #knight
+            for col in ['b', 'g']:
+                p = Knight(player)
+                player.add_piece(p)
+                self.grid[col][b_row].add_piece(p)
+
+            #bishop
+            for col in ['c', 'f']:
+                p = Bishop(player)
+                player.add_piece(p)
+                self.grid[col][b_row].add_piece(p)
+            
+            #queen king
+            for col, piece in zip(['d', 'e'], [Queen(player), King(player)]):
+                player.add_piece(piece)      
+                self.grid[col][b_row].add_piece(piece)
+                if isinstance(piece, King):
+                    player.king = piece
+
+
+
+def checkmate(self):
+        def threat():
+            for piece in self.player.opponent.pieces:
+                if self.place in piece.moves():
+                    return piece
+            return None
+
+        #can the king move out of danger
+        for mv in self.moves():
+            if not self.check(mv):
+                return False
+
+        threat_piece = threat()
+        if threat_piece:
+            for piece in self.player.pieces:
+                #can one of my pieces take out the threat piece
+                if threat.place in piece.moves():
+                    return False
+                #can a piece block the threat
+                elif 
+        else:
+            return True
 
     def capture(self, piece):
         '''adds piece to the captured list'''
