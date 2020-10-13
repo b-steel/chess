@@ -52,72 +52,75 @@ class Rook(Piece):
         place = self.place
         m = []
         for d in ['r', 'l', 'u', 'd']:
-            sq = getattr(self.place, d)
+            sq = getattr(place, d)
             while (sq is not None) and (not sq.piece):
                 m.append(sq)
                 sq = getattr(sq, d) #next sq (square)
-            if sq and sq.piece and sq.piece.team != self.team:
+            if sq and sq.piece and sq.piece.player != self.player:
                 m.append(sq)
         return m
             
 
 
 class Knight(Piece):
-    def __init__(self, player):
+    def __init__(self, player, place):
         self.player = player
+        self.place = place
         self.moved = False
-        self.name = 'pawn'
+        self.name = 'knight'
         self.char = chars[self.player.color][self.name]
 
-    def moves(self): 
+
+    def available_moves(self, board):
+        place = self.place
         m = []
         for d1, d2 in zip(['u', 'u', 'd', 'd', 'l', 'l', 'r', 'r'], ['l', 'r', 'l', 'r', 'u', 'd', 'u', 'd']):
-            s1 = getattr(self.place, d1)
-            if s1:
-                s2 = getattr(s1, d1)
-                if s2:
-                    s3 = getattr(s2, d2)
-                    if s3 and (not s3.piece or s3.piece and s3.piece.team != self.team):
+            s1 = getattr(place, d1)
+            if s1: s2 = getattr(s1, d1)
+                if s2: s3 = getattr(s2, d2)
+                    if s3 and (not s3.piece or s3.piece and s3.piece.player != self.player):
                         m.append(s3)
         return m
 
 class Bishop(Piece):
-    def __init__(self, direction):
-        self.team = None
-        self.place = None
-        self.name = 'bishop'
+    def __init__(self, player, place):
+        self.player = player
+        self.place = place
         self.moved = False
-        self.char = None
-        self.dir = direction
+        self.name = 'bishop'
+        self.char = chars[self.player.color][self.name]
 
-    def moves(self): 
+
+    def available_moves(self, board):
+        place = self.place
         m = []
         for d in ['ur', 'ul', 'dr', 'dl']:
-            sq = getattr(self.place, d)
+            sq = getattr(place, d)
             while (sq is not None) and (not sq.piece):
                 m.append(sq)
                 sq = getattr(sq, d) #next sq (square)
-            if sq and sq.piece and sq.piece.team != self.team:
+            if sq and sq.piece and sq.piece.player != self.player:
                 m.append(sq)
         return m
 
 class Queen(Piece):
-    def __init__(self, direction):
-        self.team = None
-        self.place = None
-        self.name = 'queen'
+    def __init__(self, player, place):
+        self.player = player
+        self.place = place
         self.moved = False
-        self.char = None
-        self.dir = direction
+        self.name = 'queen'
+        self.char = chars[self.player.color][self.name]
 
-    def moves(self):
+
+    def available_moves(self, board):
+        place = self.place
         m = []
         for d in ['r', 'l', 'u', 'd', 'ur', 'ul', 'dr', 'dl']:
-            sq = getattr(self.place, d)
+            sq = getattr(place, d)
             while (sq is not None) and (not sq.piece):
                 m.append(sq)
                 sq = getattr(sq, d) #next sq (square)
-            if sq and sq.piece and sq.piece.team != self.team:
+            if sq and sq.piece and sq.piece.player != self.player:
                 m.append(sq)    
         return m 
         
