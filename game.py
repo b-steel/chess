@@ -99,6 +99,8 @@ class Game():
             choice = input(f'{self.player.color.capitalize()}, please enter a move:\n')
             if choice.lower() == 'save':
                 return 'save'
+            elif choice.lower() == 'exit':
+                return 'exit'
             else:
                 move = self.parse_input(choice)
                 if move:
@@ -122,8 +124,8 @@ class Game():
         '''shows, prompts, does'''
         self.show()
         move = self.prompt()
-        if move == 'save':
-            return 'save'
+        if not isinstance(move, Move):
+            return move
         self.board.move(move)
         self.turn += 1
 
@@ -140,7 +142,8 @@ class Game():
             if r == 'save':
                 self.save_game()
                 break
-
+            elif r == 'exit':
+                break
         
         self.display_end_message() if self.game_over else print('\n')
 
