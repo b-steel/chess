@@ -1,5 +1,5 @@
 from colors import *
-chars = {'white': {'queen': color('Q', 'RED'),
+chars1 = {'white': {'queen': color('Q', 'RED'),
                    'king': color('K', 'RED'),
                    'rook': color('R', 'RED'),
                    'bishop': color('B', 'RED'),
@@ -15,14 +15,14 @@ chars = {'white': {'queen': color('Q', 'RED'),
 
          }
 
-chars1 = {'white': {'queen': u'\u2654',
+chars = {'black': {'queen': u'\u2654',
                    'king': u'\u2655',
                    'rook': u'\u2656',
                    'bishop': u'\u2657',
                    'knight': u'\u2658',
                    'pawn': u'\u2659'
                    },
-         'black': {'queen': u'\u265A',
+         'white': {'queen': u'\u265A',
                    'king': u'\u265B',
                    'rook': u'\u265C',
                    'bishop': u'\u265D',

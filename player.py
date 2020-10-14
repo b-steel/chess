@@ -14,5 +14,8 @@ class Player():
     def capture(self, p):
         self.captured.append(p)
         p.place.piece = None
-        p.place = None
+        p.place = f'Captured by {self.color}'
         p.player.pieces.remove(p)
+
+    def __str__(self):
+        return f'<Player: {self.color.capitalize()}>'

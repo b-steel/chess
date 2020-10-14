@@ -63,8 +63,25 @@ with description('board') as self:
         
 
         expect(b.grid['b'][4].piece).to(be(None))
-        expect(b.black.captured).to(contain(captured_pawn))
+        expect(b.white.captured).to(contain(captured_pawn))
     
+    with it('allows pawns to capture'):
+        b = Board()
+        m1 = b._make_move('d1d3')
+        b.move(m1)
+
+        m2 = b._make_move('e6e4')
+        b.move(m2)
+
+        pawn = b.grid['d'][3].piece
+        # print(pawn.available_moves(b))
+        captured_pawn = b.grid['e'][4].piece
+        m3 = b._make_move('d3e4')
+        b.move(m3)
+        # print(b)
+
+        expect(b.grid['e'][4].piece).to(be(pawn))
+        expect(b.white.captured).to(contain(captured_pawn))
 
 
 

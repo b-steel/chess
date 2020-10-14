@@ -13,7 +13,7 @@ class Game():
     def __init__(self):
         self.board = Board()
         self.turn = 0
-        self.players = {1: self.board.black, 2: self.board.white}
+        self.players = {1: self.board.black, 0: self.board.white}
    
     def delete_file(self):
         os.remove(f'.saved-games/{self.loaded}')
@@ -46,12 +46,12 @@ class Game():
     @property    
     def player(self):
         '''returns current player'''
-        return self.players[self.turn%2 +1]
+        return self.players[self.turn%2]
 
     @property
     def other(self):
         '''returns the other player'''
-        return self.players[(self.turn + 1)%2 + 1]
+        return self.players[(self.turn + 1)%2]
 
     def parse_input(self, inp):
         cols = list('abcdefgh')

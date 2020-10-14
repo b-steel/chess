@@ -144,11 +144,11 @@ class Board():
                 self.grid[col][row].d = self.grid[col][row-1]
 
     def create_pieces(self):
-        for player, f_row, b_row  in zip([self.black, self.white], [1, 6], [0, 7]):
+        for player, f_row, b_row  in zip([self.white, self.black], [1, 6], [0, 7]):
             #pawns
             for col in self.cols:
                 p = Pawn(player)
-                if player == self.white:
+                if player == self.black:
                     p.direction = -1
                 player.add_piece(p)
                 self.grid[col][f_row].add_piece(p)
@@ -198,9 +198,9 @@ class Board():
                 start.piece = None
         else:
             start.piece = None
-        end.add_piece(piece) # don't forget to put the piece there
-        self.moves[len(self.moves)] = move
-        self.rulechecker.en_passant_capture()
+        end.add_piece(piece) #put the piece 
+        self.moves[len(self.moves)] = move # store the move
+        self.rulechecker.en_passant_capture() #check for en passant
 
         
     def get_text(self, col, row):
@@ -229,7 +229,7 @@ class Board():
         d_w = self.get_dead('w')
         d_b = self.get_dead('b')
 
-        text =  f"Taken    a b c d e f g h    Taken\n{d_b[0]} {d_b[1]}    7|{self.get_text('a',7)} {self.get_text('b',7)} {self.get_text('c',7)} {self.get_text('d',7)} {self.get_text('e',7)} {self.get_text('f',7)} {self.get_text('g',7)} {self.get_text('h',7)}|7  {d_w[14]} {d_w[15]}\n{d_b[2]} {d_b[3]}    6|{self.get_text('a',6)} {self.get_text('b',6)} {self.get_text('c',6)} {self.get_text('d',6)} {self.get_text('e',6)} {self.get_text('f',6)} {self.get_text('g',6)} {self.get_text('h',6)}|6  {d_w[12]} {d_w[13]}\n{d_b[4]} {d_b[5]}    5|{self.get_text('a',5)} {self.get_text('b',5)} {self.get_text('c',5)} {self.get_text('d',5)} {self.get_text('e',5)} {self.get_text('f',5)} {self.get_text('g',5)} {self.get_text('h',5)}|5  {d_w[10]} {d_w[11]}\n{d_b[6]} {d_b[7]}    4|{self.get_text('a',4)} {self.get_text('b',4)} {self.get_text('c',4)} {self.get_text('d',4)} {self.get_text('e',4)} {self.get_text('f',4)} {self.get_text('g',4)} {self.get_text('h',4)}|4  {d_w[8]} {d_w[9]}\n{d_b[8]} {d_b[9]}    3|{self.get_text('a',3)} {self.get_text('b',3)} {self.get_text('c',3)} {self.get_text('d',3)} {self.get_text('e',3)} {self.get_text('f',3)} {self.get_text('g',3)} {self.get_text('h',3)}|3  {d_w[6]} {d_w[7]}\n{d_b[10]} {d_b[11]}    2|{self.get_text('a',2)} {self.get_text('b',2)} {self.get_text('c',2)} {self.get_text('d',2)} {self.get_text('e',2)} {self.get_text('f',2)} {self.get_text('g',2)} {self.get_text('h',2)}|2  {d_w[4]} {d_w[5]}\n{d_b[12]} {d_b[13]}    1|{self.get_text('a',1)} {self.get_text('b',1)} {self.get_text('c',1)} {self.get_text('d',1)} {self.get_text('e',1)} {self.get_text('f',1)} {self.get_text('g',1)} {self.get_text('h',1)}|1  {d_w[2]} {d_w[3]}\n{d_b[14]} {d_b[15]}    0|{self.get_text('a',0)} {self.get_text('b',0)} {self.get_text('c',0)} {self.get_text('d',0)} {self.get_text('e',0)} {self.get_text('f',0)} {self.get_text('g',0)} {self.get_text('h',0)}|0  {d_w[0]} {d_w[1]}\n         a b c d e f g h"
+        text =  f"Taken    a b c d e f g h    Taken\n{d_w[0]} {d_w[1]}    7|{self.get_text('a',7)} {self.get_text('b',7)} {self.get_text('c',7)} {self.get_text('d',7)} {self.get_text('e',7)} {self.get_text('f',7)} {self.get_text('g',7)} {self.get_text('h',7)}|7  {d_b[14]} {d_b[15]}\n{d_w[2]} {d_w[3]}    6|{self.get_text('a',6)} {self.get_text('b',6)} {self.get_text('c',6)} {self.get_text('d',6)} {self.get_text('e',6)} {self.get_text('f',6)} {self.get_text('g',6)} {self.get_text('h',6)}|6  {d_b[12]} {d_b[13]}\n{d_w[4]} {d_w[5]}    5|{self.get_text('a',5)} {self.get_text('b',5)} {self.get_text('c',5)} {self.get_text('d',5)} {self.get_text('e',5)} {self.get_text('f',5)} {self.get_text('g',5)} {self.get_text('h',5)}|5  {d_b[10]} {d_b[11]}\n{d_w[6]} {d_w[7]}    4|{self.get_text('a',4)} {self.get_text('b',4)} {self.get_text('c',4)} {self.get_text('d',4)} {self.get_text('e',4)} {self.get_text('f',4)} {self.get_text('g',4)} {self.get_text('h',4)}|4  {d_b[8]} {d_b[9]}\n{d_w[8]} {d_w[9]}    3|{self.get_text('a',3)} {self.get_text('b',3)} {self.get_text('c',3)} {self.get_text('d',3)} {self.get_text('e',3)} {self.get_text('f',3)} {self.get_text('g',3)} {self.get_text('h',3)}|3  {d_b[6]} {d_b[7]}\n{d_w[10]} {d_w[11]}    2|{self.get_text('a',2)} {self.get_text('b',2)} {self.get_text('c',2)} {self.get_text('d',2)} {self.get_text('e',2)} {self.get_text('f',2)} {self.get_text('g',2)} {self.get_text('h',2)}|2  {d_b[4]} {d_b[5]}\n{d_w[12]} {d_w[13]}    1|{self.get_text('a',1)} {self.get_text('b',1)} {self.get_text('c',1)} {self.get_text('d',1)} {self.get_text('e',1)} {self.get_text('f',1)} {self.get_text('g',1)} {self.get_text('h',1)}|1  {d_b[2]} {d_b[3]}\n{d_w[14]} {d_w[15]}    0|{self.get_text('a',0)} {self.get_text('b',0)} {self.get_text('c',0)} {self.get_text('d',0)} {self.get_text('e',0)} {self.get_text('f',0)} {self.get_text('g',0)} {self.get_text('h',0)}|0  {d_b[0]} {d_b[1]}\n         a b c d e f g h"
 
 
         return text

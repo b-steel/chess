@@ -4,7 +4,7 @@ from move import Move
 class Piece():
     
     def __str__(self):
-        return f'{self.player.color.capitalize()} {self.name.capitalize()} at {self.place.col}{self.place.row}'
+        return f'{self.player.color.capitalize()} {self.name.capitalize()} at {self.place}'
 
 class Pawn(Piece):
     def __init__(self, player):
@@ -20,7 +20,7 @@ class Pawn(Piece):
         if self.direction == 1:
             place = self.place
             m = [sq for sq in [place.u] if sq and not sq.piece]
-            m.append([sq for sq in [place.ur, place.ul] if sq and sq.piece and sq.piece.player != self.player])
+            m.extend([sq for sq in [place.ur, place.ul] if sq and sq.piece and sq.piece.player != self.player])
         
             #move two on first move
             if (not self.moved and not place.u.piece and not place.u.u.piece):
